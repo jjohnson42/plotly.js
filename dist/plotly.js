@@ -79081,10 +79081,19 @@ plots.sendDataToCloud = function(gd) {
         });
 
     hiddenformInput.node().value = plots.graphJson(gd, false, 'keepdata');
-    hiddenform.node().submit();
-    hiddenformDiv.remove();
+    confirmAction(
+       l('This function will upload the chart data to the internet site ' + baseUrl + ', which may share the data with other parties.  Do you wish to continue?'),
+        function() {
+            hiddenform.node().submit();
+            hiddenformDiv.remove();
+            gd.emit('plotly_afterexport');
+        },
+        function() {
+            hiddenformDiv.remove();
+            gd.emit('plotly_afterexport');
+        }
+    );
 
-    gd.emit('plotly_afterexport');
     return false;
 };
 
